@@ -2,6 +2,7 @@
 #define BLINKTORADIO_H
 
 enum {
+  AM_BLINKTORADIO = 6,
   TIMER_PERIOD_MILLI = 250
 };
 

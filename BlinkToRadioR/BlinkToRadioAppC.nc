@@ -13,5 +13,5 @@ implementation {
   App.Boot -> MainC;
   App.Leds -> LedsC;
   App.Timer0 -> Timer0;
-  App.Recieve -> AMReceiverC;
+  App.Receive -> AMReceiverC;
 }
