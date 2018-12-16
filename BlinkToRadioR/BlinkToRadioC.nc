@@ -5,7 +5,7 @@ module BlinkToRadioC {
   uses interface Boot;
   uses interface Leds;
   uses interface Timer<TMilli> as Timer0;
-  uses interface Recieve;
+  uses interface Receive;
 }
 implementation {
   uint16_t counter = 0;
@@ -23,6 +23,5 @@ implementation {
   }
 
   event void Timer0.fired() {
-   }
- }
+  }
 }
