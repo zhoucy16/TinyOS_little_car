@@ -45,6 +45,19 @@ implementation {
 
   }
 
+  event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len) {
+    if (len == sizeof(carMsg)) {
+      carMsg* carpkt = (carMsg*)payload;
+      handleMsg(carpkt);
+    }
+    return msg;
+  }
+
+  void handleMsg(carMsg *carpkt) {
+    // judge correct
+    switch 
+  }
+
   void ExcuteCommand () {
     if (commandQueue[commandHead].action == 1) {
       serialBusy = TRUE;
