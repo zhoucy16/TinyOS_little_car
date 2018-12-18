@@ -44,12 +44,27 @@ implementation {
         type=4;
         call Resource.request();
     }
-    command void TurnRight(){
+    command void Car.TurnRight(){
         type=5;
         call Resource.request();
     }
-    command void Stop(){
+    command void Car.Stop(){
         type=6;
+        call Resource.request();
+    }
+
+    command void Car.Arm_First((uint16_t value){
+        type=1;
+        call Resource.request();
+    }
+
+    command void Car.Arm_Second(){
+        type=7;
+        call Resource.request();
+    }
+
+    command void Car.Arm_Third(){
+        type=8;
         call Resource.request();
     }
 
