@@ -1,3 +1,5 @@
+#include "car.h"
+
 module CarP {
     provides {
         interface Car;
@@ -31,73 +33,80 @@ implementation {
 			urxe: 1
 		}
 	};
+	enum ActionType type;
+    uint8_t step;
+	uint16_t data;
+	uint16_t maxspeed, minspeed;
+	uint16_t initing;
 
     command void Car.Forward(){
-        type=2;
+        type = Forward;
         call Resource.request();
     }    
     command void Car.Back(){
-        type=3;
+        type = Back;
         call Resource.request();
     }
     command void Car.TurnLeft(){
-        type=4;
+        type = TurnLeft;
         call Resource.request();
     }
     command void Car.TurnRight(){
-        type=5;
+        type = TurnRight;
         call Resource.request();
     }
     command void Car.Stop(){
-        type=6;
+        type = Stop;
         call Resource.request();
     }
 
-    command void Car.Arm_First((uint16_t value){
-        type=1;
+    command void Car.Arm_First(uint16_t value){
+        type = Arm_First;
+        data = value;
         call Resource.request();
     }
 
-    command void Car.Arm_Second(){
-        type=7;
+    command void Car.Arm_Second(uint16_t value){
+        type = Arm_Second;
+        data = value;
         call Resource.request();
     }
 
     command void Car.Arm_Third(){
-        type=8;
+        type = Arm_Third;
         call Resource.request();
     }
 
     void operator(){
-        while(type <= 7){
-            if (type == 0){
-            call HplMsp430Usart.tx(0x01);
+        while(step <= 7){
+            if (step == 0){
+                call HplMsp430Usart.tx(0x01);
             }
-            else if(type == 1){
+            else if(step == 1){
                 call HplMsp430Usart.tx(0x02);
             }
-            else if(type == 2){
+            else if(step == 2){
                 call HplMsp430Usart.tx(type);            
             }
-            else if(type == 3){
+            else if(step == 3){
                 call HplMsp430Usart.tx(0x00);
             }
-            else if(type == 4){
+            else if(step == 4){
                 call HplMsp430Usart.tx(0x00);
             }
-            else if(type == 5){
+            else if(step == 5){
                 call HplMsp430Usart.tx(0xFF);
             }
-            else if(type == 6){
+            else if(step == 6){
                 call HplMsp430Usart.tx(0xFF);
             }
-            else if(type == 7){
+            else if(step == 7){
                 call HplMsp430Usart.tx(0x00);
             }
             while(!call HplMsp430Usart.isTxEmpty()){
                 continue;
             }
-            type = type + 1;
+            step = step + 1;
         }        
     }
 
@@ -105,7 +114,7 @@ implementation {
         call HplMsp430Usart.setModeUart(&config);
         call HplMsp430Usart.enableUart();
         U0CTL &= ~SYNC;
-        type = 0;
+        step = 0;
         operator();
     }
 

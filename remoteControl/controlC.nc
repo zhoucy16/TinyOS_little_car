@@ -140,7 +140,7 @@ implementation {
                 }
                 actionType = 1;
                 actionData = init1;
-                if(inAction) {
+                if(!inAction) {
                     sendCommand();
                 }
             }
@@ -151,7 +151,7 @@ implementation {
                 }
                 actionType = 1;
                 actionData = init1;
-                if(inAction) {
+                if(!inAction) {
                     sendCommand();
                 }
             }
@@ -162,7 +162,7 @@ implementation {
                 }
                 actionType = 7;
                 actionData = init2;
-                if(inAction) {
+                if(!inAction) {
                     sendCommand();
                 }
             }
@@ -173,7 +173,7 @@ implementation {
                 }
                 actionType = 7;
                 actionData = init2;
-                if(inAction) {
+                if(!inAction) {
                     sendCommand();
                 }
             }
