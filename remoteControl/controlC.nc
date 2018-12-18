@@ -13,10 +13,16 @@ moudule ControlC {
     uses interface Button;
     uses interface Read<uint16_t> as adcRead1;
 	uses interface Read<uint16_t> as adcRead2;
+
     uses interface Packet as Packet;
-    uses interface AMSend as AMSend;
+    uses interface Packet as SerialPacket;
     uses interface Receive as Receive;
+
+    uses interface AMSend as AMSend;
+    uses interface AMSend as SerialAMSend;
+
     uses interface SplitControl as RadioControl;
+    uses interface SplitControl as SerialControl;
 }
 
 implementation {
@@ -41,7 +47,10 @@ implementation {
     bool YDone;
 
     bool inAction;
+    bool serialAction
     message_t msg;
+    message_t smsg;
+
     bool stop;
     bool init;
     uint16_t speed;
@@ -60,8 +69,12 @@ implementation {
         init2 = 3000;
         init3 = 3000;
         angleStep = 300;
+        oldpinA = TRUE;
+		oldpinC = TRUE;
+		oldpinE = TRUE;
         call Button.start();
         call RadioControl.start();
+        call SerialControl.start();
     }
 
     void sendCommand() {
@@ -82,6 +95,10 @@ implementation {
         call Leds.led1Toggle();
     }
 
+    event void SerialAMSend.sendDone(message_t* message, error_t err) {
+        serialAction = FALSE;
+    }
+
     event void RadioControl.startDone(error_t err) {
         if(err != SUCCESS) {
             call RadioControl.start();
@@ -89,6 +106,19 @@ implementation {
     }
 
     event void RadioControl.stopDone(error_t err) {
+
+    }
+
+    event void SerialControl.startDone(error_t err) {
+        if(err != SUCCESS) {
+            call SerialControl.start();
+        }
+        else {
+            call timer.startPeriodic(150);
+        }
+    }
+
+    event void SerialControl.stopDone(error_t err) {
 
     }
 
@@ -119,6 +149,20 @@ implementation {
         call adcRead2.read();
     }
 
+    event message_t* Receive.receive(message_t* message, void* payload, unit8_t len) {
+        carMsg* recved;
+        rcved = (carMsg*)payload;
+        if((recved->nodeid != TOS_NODE_ID) && (recved->type == 1)) {
+            if((recved->action == 1) || (recved->action == 6) 
+            || (recved->action == 7) || (recved->action == 8)) {
+                stop = TRUE;
+            }
+            else {
+                stop = FALSE;
+            }
+        }
+        return msg;
+    }
     void operate() {
         if((pinA != oldPinA) || (!pinB) || (pinC != oldPinC) ||
         (pinE != oldPinE) || (!pinF) ||
@@ -178,6 +222,20 @@ implementation {
                 }
             }
         }
+        oldpinA = pinA;
+		oldpinC = pinC;
+		oldpinE = pinE;
+		stop = FALSE;
+		}
+		else {
+			if (!stop) {
+				actionType = 6;
+				if (!busy) {
+					sendCommand();
+					call Leds.led0Toggle();
+				}
+			}
+		}
     }
 
     event void Button.pinvalueADone(bool value) {
