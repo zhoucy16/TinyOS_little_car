@@ -4,7 +4,7 @@ implementation {
     components MainC, ButtonC, LedsC, JoyStickC;
     components ControlC as App;
     components ActiveMessageC;
-    //components SerialActiveMessageC;
+    components SerialActiveMessageC;
     components new TimerMilliC() as timer;
     
     App.Boot->MainC;
@@ -16,5 +16,10 @@ implementation {
     App.Packet->ActiveMessageC;
     App.AMSend->ActiveMessageC.AMSend[AM_carMsg];
     App.Receive->ActiveMessageC.Receive[AM_carMsg];
+    
+    App.SerialPacket->SerialActiveMessageC;
+    App.SerialAMSend->SerialActiveMessageC.AMSend[AM_serialMsg];
+    
     App.RadioControl->ActiveMessageC;
+    App.SerialControl->SerialActiveMessageC;
 }
