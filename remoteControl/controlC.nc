@@ -178,6 +178,20 @@ implementation {
                 }
             }
         }
+        oldpinA = pinA;
+		oldpinC = pinC;
+		oldpinE = pinE;
+		stop = FALSE;
+		}
+		else {
+			if (!stop) {
+				actionType = 6;
+				if (!busy) {
+					sendCommand();
+					call Leds.led0Toggle();
+				}
+			}
+		}
     }
 
     event void Button.pinvalueADone(bool value) {
