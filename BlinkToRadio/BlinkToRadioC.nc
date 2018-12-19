@@ -33,12 +33,12 @@ implementation {
 
   event void Timer0.fired() {
     counter++;
-    call Leds.set(counter);
     if (!busy) {
       BlinkToRadioMsg* btrpkt = (BlinkToRadioMsg*)(call Packet.getPayload(&pkt, sizeof (BlinkToRadioMsg)));
       btrpkt->nodeid = TOS_NODE_ID;
       btrpkt->counter = counter;
       if (call AMSend.send(AM_BROADCAST_ADDR, &pkt, sizeof(BlinkToRadioMsg)) == SUCCESS) {
+        call Leds.set(counter);
         busy = TRUE;
       }
     }
