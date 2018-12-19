@@ -39,27 +39,27 @@ implementation {
 	uint16_t maxspeed, minspeed;
 	uint16_t initing;
 
-    command void Car.Forward(){
+    command void Car.Forward(uint16_t value){
         type = Forward;
         data = MIDSPEED;
         call Resource.request();
     }    
-    command void Car.Back(){
+    command void Car.Back(uint16_t value){
         type = Back;
         data = MIDSPEED;
         call Resource.request();
     }
-    command void Car.TurnLeft(){
+    command void Car.TurnLeft(uint16_t value){
         type = TurnLeft;
         data = MIDSPEED;
         call Resource.request();
     }
-    command void Car.TurnRight(){
+    command void Car.TurnRight(uint16_t value){
         type = TurnRight;
         data = MIDSPEED;
         call Resource.request();
     }
-    command void Car.Stop(){
+    command void Car.Stop(uint16_t value){
         type = Stop;
         data = 0;
         call Resource.request();
@@ -78,39 +78,42 @@ implementation {
     }
 
     void operator () {
-        uint8_t step = 0;
-        while(step <= 7){
-            if (step == 0){
-                call HplMsp430Usart.tx(0x01);
-            }
-            else if(step == 1){
-                call HplMsp430Usart.tx(0x02);
-            }
-            else if(step == 2){
-                call HplMsp430Usart.tx(type);            
-            }
-            else if(step == 3){
-                call HplMsp430Usart.tx(data / 256);
-            }
-            else if(step == 4){
-                call HplMsp430Usart.tx(data % 256);
-            }
-            else if(step == 5){
-                call HplMsp430Usart.tx(0xFF);
-            }
-            else if(step == 6){
-                call HplMsp430Usart.tx(0xFF);
-            }
-            else if(step == 7){
-                call HplMsp430Usart.tx(0x00);
-            }
-            while(!call HplMsp430Usart.isTxEmpty()){
-                continue;
-            }
-            step = step + 1;
+        uint8_t step = 0;        
+        if (step == 0){
+            call HplMsp430Usart.tx(0x01);
         }
-        call Leds.led0Toggle();
-        call Resource.release();
+        else if(step == 1){
+            call HplMsp430Usart.tx(0x02);
+        }
+        else if(step == 2){
+            call HplMsp430Usart.tx(type);            
+        }
+        else if(step == 3){
+            call HplMsp430Usart.tx(data / 256);
+        }
+        else if(step == 4){
+            call HplMsp430Usart.tx(data % 256);
+        }
+        else if(step == 5){
+            call HplMsp430Usart.tx(0xFF);
+        }
+        else if(step == 6){
+            call HplMsp430Usart.tx(0xFF);
+        }
+        else if(step == 7){
+            call HplMsp430Usart.tx(0x00);
+        }
+        while(!call HplMsp430Usart.isTxEmpty()){
+            continue;
+        }
+        step = step + 1;
+        if(step <= 7){
+            operator();
+        }
+        else{
+            call Leds.led0Toggle();
+            call Resource.release();
+        }     
     }
 
     event void Resource.granted(){

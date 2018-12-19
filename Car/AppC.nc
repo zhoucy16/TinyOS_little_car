@@ -18,23 +18,23 @@ implementation {
   }
   event void Timer.fired() {
     if(step == 0 || step == 1){
-      call Car.Forward();
+      call Car.Forward(500);
       step++;
     }
     else if(step == 2)||(step == 3){
-      call Car.Back();
+      call Car.Back(500);
       step++;
     }
     else if(step == 4 || step == 5){
-      call Car.TurnLeft();
+      call Car.TurnLeft(500);
       step++;
     }
     else if(step == 6 || step == 7){
-      call Car.TurnRight();
+      call Car.TurnRight(500);
       step++;
     }
     else if(step == 8 || step == 9){
-      call Car.Stop();
+      call Car.Stop(0);
       step++;
     }
     else if(step == 10){
