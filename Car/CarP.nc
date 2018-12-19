@@ -39,28 +39,29 @@ implementation {
 	uint16_t maxspeed, minspeed;
 	uint16_t initing;
 
-    command void Car.Forward(uint16_t value){
+    command void Car.Forward(){
         type = Forward;
         data = MIDSPEED;
         call Resource.request();
     }    
-    command void Car.Back(uint16_t value){
+    command void Car.Back(){
         type = Back;
         data = MIDSPEED;
         call Resource.request();
     }
-    command void Car.TurnLeft(uint16_t value){
+    command void Car.TurnLeft(){
         type = TurnLeft;
         data = MIDSPEED;
         call Resource.request();
     }
-    command void Car.TurnRight(uint16_t value){
+    command void Car.TurnRight(){
         type = TurnRight;
         data = MIDSPEED;
         call Resource.request();
     }
-    command void Car.Stop(uint16_t value){
+    command void Car.Stop(){
         type = Stop;
+        data = 0;
         call Resource.request();
     }
 
@@ -72,12 +73,6 @@ implementation {
 
     command void Car.Arm_Second(uint16_t value){
         type = Arm_Second;
-        data = value;
-        call Resource.request();
-    }
-
-    command void Car.Arm_Third(uint16_t value){
-        type = Arm_Third;
         data = value;
         call Resource.request();
     }
