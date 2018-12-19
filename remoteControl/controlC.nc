@@ -26,9 +26,7 @@ implementation {
     bool pinD;
     bool pinE;
     bool pinF;
-    bool oldPinA;
-    bool oldPinC;
-    bool oldPinE;
+    
     uint16_t valX;
     uint16_t valY;
     bool ADone;
@@ -45,9 +43,7 @@ implementation {
     message_t msg;
     message_t smsg;
 
-    bool stop;
-    bool init;
-    uint16_t speed;
+    //uint16_t speed;
     uint16_t init1;
     uint16_t init2;
     uint16_t init3;
@@ -56,16 +52,10 @@ implementation {
     uint16_t actionData;
 
     event void Boot.booted() {
-        stop = TRUE;
-        init = FALSE;
-        speed = 500;
+        //speed = 500;
         init1 = 3000;
         init2 = 3000;
-        init3 = 3000;
         angleStep = 300;
-        oldpinA = TRUE;
-		oldpinC = TRUE;
-		oldpinE = TRUE;
         call Button.start();
         call RadioControl.start();
         call SerialControl.start();
@@ -108,7 +98,7 @@ implementation {
             call SerialControl.start();
         }
         else {
-            call timer.startPeriodic(150);
+            call timer.startPeriodic(TIMER_PERIOD_MILLI);
         }
     }
 
@@ -125,7 +115,7 @@ implementation {
     }
 
     event void timer.fired() {
-        ADone = FALSE;
+        ADone = TRUE;//A NOT USED
         BDone = FALSE;
         CDone = FALSE;
         DDone = FALSE;
@@ -143,12 +133,12 @@ implementation {
         call adcRead2.read();
     }
 
+    /*
     event message_t* Receive.receive(message_t* message, void* payload, unit8_t len) {
         carMsg* recved;
         rcved = (carMsg*)payload;
         if((recved->nodeid != TOS_NODE_ID) && (recved->type == 1)) {
-            if((recved->action == 1) || (recved->action == 6) 
-            || (recved->action == 7) || (recved->action == 8)) {
+            if((recved->action == 1) || (recved->action == 6) || (recved->action == 7)) {
                 stop = TRUE;
             }
             else {
@@ -157,21 +147,15 @@ implementation {
         }
         return msg;
     }
+    */
+
     void operate() {
-        if((pinA != oldPinA) || (!pinB) || (pinC != oldPinC) ||
-        (pinE != oldPinE) || (!pinF) ||
-        (valX == 0xfff) || (valX == 0x000) ||
+        if((pinA) || (pinB) || (pinC) || (pinE) || (pinF) ||
+        (valX == 0xfff) || (valX == 0x000) || 
         (valY == 0xfff) || (valY == 0x000)) {
             call Leds.led2Toggle();
-            if (!pinC) {
-                init1 = MIDANGLE;
-                init2 = MIDANGLE;
-                actionType = 7;
-                actionData = MIDANGLE;
-                sendCommand();
-            }
-            else if ((pinA) && (!pinB) && (pinC) && (pinE)
-            && (pinF) && (valX == 0x000)) {
+            //机械臂上升
+            if (pinB) {
                 if(init1 + angleStep < MAXANGLE){
                     init1 += angleStep;
                 }
@@ -181,8 +165,8 @@ implementation {
                     sendCommand();
                 }
             }
-            else if ((pinA) && (!pinB) && (pinC) && (pinE)
-            && (pinF) && (valX == 0xfff)) {
+            //机械臂下降
+            else if (pinC) {
                 if(init1 - angleStep > MINANGLE){
                     init1 -= angleStep;
                 }
@@ -192,19 +176,8 @@ implementation {
                     sendCommand();
                 }
             }
-            else if ((pinA) && (pinB) && (pinC) && (pinE)
-            && (!pinF) && (valY == 0x000)) {
-                if(init2 + angleStep < MAXANGLE){
-                    init1 += angleStep;
-                }
-                actionType = 7;
-                actionData = init2;
-                if(!inAction) {
-                    sendCommand();
-                }
-            }
-            else if ((pinA) && (pinB) && (pinC) && (pinE)
-            && (!pinF) && (valY == 0xfff)) {
+            //机械臂左转
+            else if (pinE) {
                 if(init2 - angleStep > MINANGLE){
                     init2 -= angleStep;
                 }
@@ -214,19 +187,68 @@ implementation {
                     sendCommand();
                 }
             }
+            //机械臂右转
+            else if (pinF) {
+                if(init2 + angleStep < MAXANGLE){
+                    init2 += angleStep;
+                }
+                actionType = 7;
+                actionData = init2;
+                if(!inAction) {
+                    sendCommand();
+                }
+            }
+            //机械臂归位
+            else if (pinD) {
+                actionType = 7;
+                actionData = MINANGLE;
+                if(!inAction) {
+                    sendCommand();
+                }
+                actionType = 1;
+                actionData = MINANGLE;
+                if(!inAction) {
+                    sendCommand();
+                }
+            }
+            //小车前进
+            else if (valY == 0xfff) {
+                actionType = 2;
+                actionData = MIDSPEED;
+                if(!inAction) {
+                    sendCommand();
+                }
+            }
+            //小车后退
+            else if (valY == 0x000) {
+                actionType = 3;
+                actionData = MIDSPEED;
+                if(!inAction) {
+                    sendCommand();
+                }
+            }
+            //小车左转
+            else if (valX == 0xfff) {
+                actionType = 4;
+                actionData = MIDSPEED;
+                if(!inAction) {
+                    sendCommand();
+                }
+            }
+            //小车右转
+            else if (valX == 0x000) {
+                actionType = 5;
+                actionData = MIDSPEED;
+                if(!inAction) {
+                    sendCommand();
+                }
+            }
         }
-        oldpinA = pinA;
-		oldpinC = pinC;
-		oldpinE = pinE;
-		stop = FALSE;
-		}
 		else {
-			if (!stop) {
-				actionType = 6;
-				if (!busy) {
-					sendCommand();
-					call Leds.led0Toggle();
-				}
+			actionType = 6;
+			if (!inAction) {
+			    sendCommand();
+			    call Leds.led0Toggle();
 			}
 		}
     }

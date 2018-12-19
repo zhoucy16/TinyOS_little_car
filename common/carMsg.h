@@ -7,6 +7,7 @@
 #define MAXANGLE 5000
 #define MINANGLE 1800
 #define MIDANGLE (MINANGLE + MAXANGLE) / 2
+#define TIMER_PERIOD_MILLI 150
 
 typedef nx_struct carMsg {
 	nx_uint16_t nodeid;
