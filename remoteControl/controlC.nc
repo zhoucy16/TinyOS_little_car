@@ -1,10 +1,4 @@
-#include "carMsg.h"
-
-#define MAXSPEED 600
-#define MINSPEED 200
-#define MAXANGLE 5000
-#define MINANGLE 1800
-#define MIDANGLE (MINANGLE + MAXANGLE) / 2
+#include "../common/carMsg.h"
 
 moudule ControlC {
     uses interface Boot;

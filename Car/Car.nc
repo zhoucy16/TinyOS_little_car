@@ -14,6 +14,9 @@ interface Car
     //command void Arm_TurnRight();
     //command void Arm_Resrt();
 
+    // event
+    // event void operationDone(type);
+
     // settings
     command void setMaxSpeed(uint16_t speed);
     command void setMinSpeed(uint16_t speed);

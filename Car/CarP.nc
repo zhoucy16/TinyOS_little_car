@@ -1,4 +1,5 @@
 #include "car.h"
+#include "../common/carMsg.h"
 
 module CarP {
     provides {
@@ -40,22 +41,22 @@ implementation {
 
     command void Car.Forward(){
         type = Forward;
-        data = 500;
+        data = MIDSPEED;
         call Resource.request();
     }    
     command void Car.Back(){
         type = Back;
-        data = 500;
+        data = MIDSPEED;
         call Resource.request();
     }
     command void Car.TurnLeft(){
         type = TurnLeft;
-        data = 500;
+        data = MIDSPEED;
         call Resource.request();
     }
     command void Car.TurnRight(){
         type = TurnRight;
-        data = 500;
+        data = MIDSPEED;
         call Resource.request();
     }
     command void Car.Stop(){
