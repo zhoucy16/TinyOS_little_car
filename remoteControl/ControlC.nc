@@ -1,16 +1,17 @@
+#include <Timer.h>
 #include "../common/carMsg.h"
 
-moudule ControlC {
+module ControlC {
     uses interface Boot;
     uses interface Leds;
-    uses interface Timer<Tmilli> as timer;
+    uses interface Timer<TMilli> as timer;
     uses interface Button;
     uses interface Read<uint16_t> as adcRead1;
 	uses interface Read<uint16_t> as adcRead2;
 
     uses interface Packet as Packet;
     uses interface Packet as SerialPacket;
-    uses interface Receive as Receive;
+    // uses interface Receive as Receive;
 
     uses interface AMSend as AMSend;
     uses interface AMSend as SerialAMSend;
@@ -39,7 +40,7 @@ implementation {
     bool YDone;
 
     bool inAction;
-    bool serialAction
+    bool serialAction;
     message_t msg;
     message_t smsg;
 
@@ -48,7 +49,7 @@ implementation {
     uint16_t init2;
     uint16_t init3;
     uint16_t angleStep;
-    unit8_t actionType;
+    uint8_t actionType;
     uint16_t actionData;
 
     event void Boot.booted() {

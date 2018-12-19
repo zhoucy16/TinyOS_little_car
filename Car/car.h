@@ -2,7 +2,7 @@
 #define CAR_H
 
 typedef struct Command {
-  uint8_t action;
+  uint16_t action;
   uint16_t data;
 } Command;
 
@@ -16,6 +16,6 @@ enum ActionType {
   Arm_Second,
   Arm_Third,
   End
-}
+};
 
 #endif
