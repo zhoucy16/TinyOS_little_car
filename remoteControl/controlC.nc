@@ -2,9 +2,9 @@
 
 #define MAXSPEED 600
 #define MINSPEED 200
-#define MAXANGLE 4500
-#define MIDANGLE 4500
-#define MINANGLE 500
+#define MAXANGLE 5000
+#define MINANGLE 1800
+#define MIDANGLE (MINANGLE + MAXANGLE) / 2
 
 moudule ControlC {
     uses interface Boot;
@@ -171,8 +171,7 @@ implementation {
             call Leds.led2Toggle();
             if (!pinC) {
                 init1 = MIDANGLE;
-                init1 = MIDANGLE;
-                init3 = MIDANGLE;
+                init2 = MIDANGLE;
                 actionType = 7;
                 actionData = MIDANGLE;
                 sendCommand();

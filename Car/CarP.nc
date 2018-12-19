@@ -34,28 +34,31 @@ implementation {
 		}
 	};
 	enum ActionType type;
-    uint8_t step;
 	uint16_t data;
 	uint16_t maxspeed, minspeed;
 	uint16_t initing;
 
-    command void Car.Forward(){
+    command void Car.Forward(uint16_t value){
         type = Forward;
+        data = 500;
         call Resource.request();
     }    
-    command void Car.Back(){
+    command void Car.Back(uint16_t value){
         type = Back;
+        data = 500;
         call Resource.request();
     }
-    command void Car.TurnLeft(){
+    command void Car.TurnLeft(uint16_t value){
         type = TurnLeft;
+        data = 500;
         call Resource.request();
     }
-    command void Car.TurnRight(){
+    command void Car.TurnRight(uint16_t value){
         type = TurnRight;
+        data = 500;
         call Resource.request();
     }
-    command void Car.Stop(){
+    command void Car.Stop(uint16_t value){
         type = Stop;
         call Resource.request();
     }
@@ -72,12 +75,14 @@ implementation {
         call Resource.request();
     }
 
-    command void Car.Arm_Third(){
+    command void Car.Arm_Third(uint16_t value){
         type = Arm_Third;
+        data = value;
         call Resource.request();
     }
 
-    void operator(){
+    void operator () {
+        uint8_t step = 0;
         while(step <= 7){
             if (step == 0){
                 call HplMsp430Usart.tx(0x01);
@@ -89,10 +94,10 @@ implementation {
                 call HplMsp430Usart.tx(type);            
             }
             else if(step == 3){
-                call HplMsp430Usart.tx(0x00);
+                call HplMsp430Usart.tx(data / 256);
             }
             else if(step == 4){
-                call HplMsp430Usart.tx(0x00);
+                call HplMsp430Usart.tx(data % 256);
             }
             else if(step == 5){
                 call HplMsp430Usart.tx(0xFF);
@@ -107,14 +112,16 @@ implementation {
                 continue;
             }
             step = step + 1;
-        }        
+        }
+        call Leds.led0Toggle();
+        call Resource.release();
+        signal Car.operationDone(next_op_type);
     }
 
     event void Resource.granted(){
         call HplMsp430Usart.setModeUart(&config);
         call HplMsp430Usart.enableUart();
         U0CTL &= ~SYNC;
-        step = 0;
         operator();
     }
 
