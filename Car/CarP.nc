@@ -1,4 +1,5 @@
 #include "car.h"
+#include "../common/carMsg.h"
 
 module CarP {
     provides {
@@ -40,22 +41,22 @@ implementation {
 
     command void Car.Forward(uint16_t value){
         type = Forward;
-        data = 500;
+        data = MIDSPEED;
         call Resource.request();
     }    
     command void Car.Back(uint16_t value){
         type = Back;
-        data = 500;
+        data = MIDSPEED;
         call Resource.request();
     }
     command void Car.TurnLeft(uint16_t value){
         type = TurnLeft;
-        data = 500;
+        data = MIDSPEED;
         call Resource.request();
     }
     command void Car.TurnRight(uint16_t value){
         type = TurnRight;
-        data = 500;
+        data = MIDSPEED;
         call Resource.request();
     }
     command void Car.Stop(uint16_t value){
@@ -115,7 +116,6 @@ implementation {
         }
         call Leds.led0Toggle();
         call Resource.release();
-        signal Car.operationDone(next_op_type);
     }
 
     event void Resource.granted(){

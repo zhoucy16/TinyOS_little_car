@@ -1,9 +1,6 @@
 #ifndef CAR_H
 #define CAR_H
 
-#define ANGLE_MIN 1800
-#define ANGLE_MAX 5000
-
 typedef struct Command {
   uint8_t action;
   uint16_t data;
