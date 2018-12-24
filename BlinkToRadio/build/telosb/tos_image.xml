@@ -1,13 +1,13 @@
 <tos_image>
   <ident>
-    <deluge_support>no</deluge_support>
-    <timestamp>5C1A2BDBL</timestamp>
-    <uidhash>50CF9A1FL</uidhash>
     <platform>telosb</platform>
-    <username>root</username>
-    <appname>BlinkToRadioApp</appname>
+    <deluge_support>no</deluge_support>
     <userhash>A3473BA6L</userhash>
+    <timestamp>5C1B14BAL</timestamp>
     <hostname>ubuntu</hostname>
+    <username>root</username>
+    <uidhash>E4B14E9EL</uidhash>
+    <appname>BlinkToRadioApp</appname>
   </ident>
   <image format="ihex">
 :104000005542200135D0085A8245661231400039A8

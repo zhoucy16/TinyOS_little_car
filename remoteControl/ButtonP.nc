@@ -1,3 +1,5 @@
+#include "printf.h"
+
 module ButtonP {
     provides {
         interface Button;
@@ -44,31 +46,37 @@ implementation {
 
     command void Button.pinvalueA() {
         pinA = call portA.get();
+        printf("A: %u\n", pinA);
         signal Button.pinvalueADone(pinA);
     }
 
     command void Button.pinvalueB() {
         pinB = call portB.get();
+        printf("B: %u\n", pinB);
         signal Button.pinvalueBDone(pinB);
     }
 
     command void Button.pinvalueC() {
         pinC = call portC.get();
+        printf("C: %u\n", pinC);
         signal Button.pinvalueCDone(pinC);
     }
 
     command void Button.pinvalueD() {
         pinD = call portD.get();
+        printf("D: %u\n", pinD);
         signal Button.pinvalueDDone(pinD);
     }
 
     command void Button.pinvalueE() {
         pinE = call portE.get();
+        printf("E: %u\n", pinE);
         signal Button.pinvalueEDone(pinE);
     }
 
     command void Button.pinvalueF() {
         pinF = call portF.get();
+        printf("F: %u\n", pinF);
         signal Button.pinvalueFDone(pinF);
     }
 }

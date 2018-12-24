@@ -8,6 +8,7 @@ module AppC {
     interface Leds;
     interface Car;
     interface Timer<TMilli> as Timer;
+    interface Timer<TMilli> as TimerReset;
 
     interface Packet;
     interface AMPacket;
@@ -28,7 +29,7 @@ implementation {
     if (err == SUCCESS) {
       automatic = TRUE;
       step = 0;
-      call Timer.startPeriodic(150);
+      call Timer.startPeriodic(TIMER_PERIOD_AUTO);
     }
     else {
       call AMControl.start();
@@ -77,6 +78,7 @@ implementation {
     }    
     else if(step >= 14){
       automatic = FALSE;
+      call Car.Stop(0);
       call Timer.stop();
     }
   }
@@ -107,6 +109,10 @@ implementation {
       case 7:
         call Car.Arm_Second(data);
         break;
+      case 8:
+        call Car.Arm_Second(MIDANGLE);
+        call TimerReset.startPeriodic(TIMER_PERIOD_RESET);
+        break;      
       default:
         break;
     }
@@ -121,5 +127,10 @@ implementation {
       handleMsg(carpkt->action, carpkt->data);
     }
     return msg;
+  }
+
+  event void TimerReset.fired () {
+    call Car.Arm_First(MIDANGLE);
+    call TimerReset.stop();
   }
 }

@@ -1,2 +1,2 @@
-COMPONENT=AppC
+COMPONENT=AppP
 include $(MAKERULES)

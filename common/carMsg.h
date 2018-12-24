@@ -8,6 +8,8 @@
 #define MINANGLE 1800
 #define MIDANGLE (MINANGLE + MAXANGLE) / 2
 #define TIMER_PERIOD_MILLI 150
+#define TIMER_PERIOD_AUTO  1500
+#define TIMER_PERIOD_RESET 500
 
 typedef nx_struct carMsg {
 	nx_uint16_t nodeid;
@@ -26,6 +28,7 @@ typedef nx_struct serialMsg {
 } serialMsg;
 
 enum {
+	AM_radio = 6,
 	AM_carMsg = 7,
 	AM_serialMsg = 8
 };

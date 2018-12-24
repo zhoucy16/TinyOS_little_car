@@ -1,12 +1,17 @@
 #include <Timer.h>
+#define NEW_PRINTF_SEMANTICS
 #include "../common/carMsg.h"
 
-configuration controlAppC {}
+configuration ControlAppC {}
 
 implementation {
     components MainC, ButtonC, LedsC, JoyStickC;
     components ControlC as App;
     components ActiveMessageC;
+    components new AMSenderC(AM_radio);
+    components PrintfC;
+  components SerialStartC;
+
     components SerialActiveMessageC;
     components new TimerMilliC() as timer;
     
@@ -17,7 +22,7 @@ implementation {
     App.adcRead2->JoyStickC.Read2;
     App.timer->timer;
     App.Packet->ActiveMessageC;
-    App.AMSend->ActiveMessageC.AMSend[AM_carMsg];
+    App.AMSend->AMSenderC;
     // App.Receive->ActiveMessageC.Receive[AM_carMsg];
     
     App.SerialPacket->SerialActiveMessageC;

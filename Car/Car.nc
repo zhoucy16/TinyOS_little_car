@@ -10,7 +10,7 @@ interface Car
     //Robotic arm
     command void Arm_First(uint16_t value);
     command void Arm_Second(uint16_t value);
-    command void Arm_Third(uint16_t value);
+    // command void Arm_Third(uint16_t value);
     //command void Arm_TurnRight();
     //command void Arm_Resrt();
 
@@ -18,6 +18,6 @@ interface Car
     // event void operationDone(type);
 
     // settings
-    command void setMaxSpeed(uint16_t speed);
-    command void setMinSpeed(uint16_t speed);
+    // command void setMaxSpeed(uint16_t speed);
+    // command void setMinSpeed(uint16_t speed);
 }
