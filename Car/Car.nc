@@ -11,11 +11,6 @@ interface Car
     command void Arm_First();
     command void Arm_Second();
     command void Arm_Third();
-    //command void Arm_TurnRight();
-    //command void Arm_Resrt();
-
-    // event
-    // event void operationDone(type);
 
     // settings
     command void setMaxSpeed(uint16_t speed);

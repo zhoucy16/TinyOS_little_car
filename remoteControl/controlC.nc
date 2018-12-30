@@ -65,8 +65,6 @@ implementation {
         carMsg* toSend;
         call Leds.led1Toggle();
         toSend = (carMsg*)(call Packet.getPayload(&msg, sizeof(carMsg)));
-        toSend->nodeid = TOS_NODE_ID;
-        toSend->type = 0;
         toSend->action = actionType;
         toSend->data = actionData;
         if((call AMSend.send(AM_BROADCAST_ADDR, &msg, sizeof(carMsg))) == SUCCESS) {
@@ -132,22 +130,6 @@ implementation {
         call adcRead1.read();
         call adcRead2.read();
     }
-
-    /*
-    event message_t* Receive.receive(message_t* message, void* payload, unit8_t len) {
-        carMsg* recved;
-        rcved = (carMsg*)payload;
-        if((recved->nodeid != TOS_NODE_ID) && (recved->type == 1)) {
-            if((recved->action == 1) || (recved->action == 6) || (recved->action == 7)) {
-                stop = TRUE;
-            }
-            else {
-                stop = FALSE;
-            }
-        }
-        return msg;
-    }
-    */
 
     void operate() {
         if((pinA) || (pinB) || (pinC) || (pinE) || (pinF) ||

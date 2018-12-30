@@ -10,8 +10,6 @@
 #define TIMER_PERIOD_MILLI 150
 
 typedef nx_struct carMsg {
-	nx_uint16_t nodeid;
-	nx_uint16_t type;
 	nx_uint8_t action;
 	nx_uint16_t data;
 } carMsg;
