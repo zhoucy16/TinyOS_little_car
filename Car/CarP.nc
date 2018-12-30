@@ -1,5 +1,4 @@
 #include "car.h"
-#include "../common/carMsg.h"
 
 module CarP {
     provides {
@@ -9,6 +8,7 @@ module CarP {
     uses {
         interface Resource;
         interface HplMsp430Usart;
+        interface Leds;
     }
 }
 
@@ -35,50 +35,57 @@ implementation {
 		}
 	};
 	enum ActionType type;
+    uint8_t step;
 	uint16_t data;
 	uint16_t maxspeed, minspeed;
 	uint16_t initing;
 
     command void Car.Forward(uint16_t value){
+        call Leds.set(1);
         type = Forward;
-        data = MIDSPEED;
+        data = value;
         call Resource.request();
     }    
     command void Car.Back(uint16_t value){
+        call Leds.set(2);
         type = Back;
-        data = MIDSPEED;
+        data = value;
         call Resource.request();
     }
     command void Car.TurnLeft(uint16_t value){
+        call Leds.set(3);
         type = TurnLeft;
-        data = MIDSPEED;
+        data = value;
         call Resource.request();
     }
     command void Car.TurnRight(uint16_t value){
+        call Leds.set(4);
         type = TurnRight;
-        data = MIDSPEED;
+        data = value;
         call Resource.request();
     }
     command void Car.Stop(uint16_t value){
+        call Leds.set(5);
         type = Stop;
-        data = 0;
+        data = value;
         call Resource.request();
     }
 
     command void Car.Arm_First(uint16_t value){
+        call Leds.set(6);
         type = Arm_First;
         data = value;
         call Resource.request();
     }
 
     command void Car.Arm_Second(uint16_t value){
+        call Leds.set(7);
         type = Arm_Second;
         data = value;
         call Resource.request();
     }
 
-    void operator () {
-        uint8_t step = 0;        
+    void operator () {      
         if (step == 0){
             call HplMsp430Usart.tx(0x01);
         }
@@ -111,7 +118,6 @@ implementation {
             operator();
         }
         else{
-            call Leds.led0Toggle();
             call Resource.release();
         }     
     }
@@ -120,6 +126,7 @@ implementation {
         call HplMsp430Usart.setModeUart(&config);
         call HplMsp430Usart.enableUart();
         U0CTL &= ~SYNC;
+        step = 0;
         operator();
     }
 
